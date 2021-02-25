@@ -12,7 +12,20 @@ Node with http:
     - 
 
 Node File System:
-    - every 64,000 bytes or 64 KB of data brought into node is handled as a stream
+    - every 64,000 bytes or 64 KB of data brought into node is handled as a stream - 64 KB is called the high water mark
     - Accessing 1 MB from the hard drive of a machine takes ~ 1 ms
     - Node has an error first pattern, a lot of the time there will be two inputs into a function, the first of which will be errorData in most cases
     - 
+
+Node Streams:
+    - A stream is a chunk of data - by default in node it is 64 KB in size
+    - The broadcast type in node is 'data' much like the 'request' broadcast type for an incoming http message and the 'clientError' broadcast type for client errors in node.
+    - Node will use a queue to store individual streams of data as they are processed while the auto-called function associated with the emitted 'data' event continues to process the data from the previous stream. Once the previous stream has been processed the next stream will be dequeued and the process will continue until the queue has been emptied and all the data from the original file has been handled.
+    - This concept is the introduction of the event loop in node and the associated callback queue
+    - There are a total of 6 queues in the node event loop
+    - Call Stack = JS keeps track of what function is being run and where it is being run from. Whenever a function is to be run, it is added to the call stack.
+    - Callback Queue = any functions delayed from running (and automatically run by node) are added to the callback queue when the background node task has completed (or there's been some activity like a request)
+    -Event Loop = Determines what function/code to run next from the queues
+    - When the whole file has been processed, node will emit a 'close' event signaling that file processing is completed
+    - 
+
