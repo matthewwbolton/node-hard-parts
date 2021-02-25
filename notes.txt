@@ -3,5 +3,6 @@
 -If there is no return keyword inside the execution context of the function being executed then we just leave the function when we reach the closing curly brace.
 -Javascript Does two main things:
     1) Saves code and data to be executed at a later time
-    2) Runs / Executes Saved Code and data
+    2) Runs / Executes saved code and data
+-there are 64,000 network ports on any given network interface
 -
