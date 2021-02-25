@@ -1,0 +1,7 @@
+- The ability of JS to go down the page line by line and execute code is known as the thread of execution.
+- To run the code inside of a function declaration we need a new execution context.
+-If there is no return keyword inside the execution context of the function being executed then we just leave the function when we reach the closing curly brace.
+-Javascript Does two main things:
+    1) Saves code and data to be executed at a later time
+    2) Runs / Executes Saved Code and data
+-
