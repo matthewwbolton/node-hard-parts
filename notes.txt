@@ -6,3 +6,13 @@
     2) Runs / Executes saved code and data
 -there are 64,000 network ports on any given network interface
 -
+
+Node with http:
+
+    - 
+
+Node File System:
+    - every 64,000 bytes or 64 KB of data brought into node is handled as a stream
+    - Accessing 1 MB from the hard drive of a machine takes ~ 1 ms
+    - Node has an error first pattern, a lot of the time there will be two inputs into a function, the first of which will be errorData in most cases
+    - 
