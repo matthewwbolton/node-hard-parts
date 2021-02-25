@@ -8,7 +8,11 @@
   },
   "scripts": {
     "start": "node server.js",
+    "dev": "nodemon server.js",
     "streams": "cd streams && node streams.js "
   },
-  "author": ""
+  "author": "",
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
 }
