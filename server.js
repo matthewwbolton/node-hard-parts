@@ -8,9 +8,15 @@ function doOnRequest(request, response) {
   if (request.method === "GET" && request.url === "/") {
     // read the index.html file and send it back to the client
     // code here...
-    fs.createReadStream();
+    let homepage = fs.readFileSync("index.html", "utf-8");
+    response.end(homepage);
+  } else if (request.method === "GET" && request.url === "/styles.css") {
+    let styling = fs.readFileSync("style.css", "utf-8");
+    response.end(styling);
   } else if (request.method === "POST" && request.url === "/sayHi") {
     // code here...
+    fs.appendFileSync("hi_log.txt", "Somebody said Hi!\n");
+    response.end("saying hi right back to you!");
   } else if (request.method === "POST" && request.url === "/greeting") {
     // accumulate the request body in a series of chunks
     // code here...
