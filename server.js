@@ -8,10 +8,10 @@ function doOnRequest(request, response) {
   if (request.method === "GET" && request.url === "/") {
     // read the index.html file and send it back to the client
     // code here...
-    let homepage = fs.readFileSync("index.html", "utf-8");
-    response.end(homepage);
+    var page = fs.readFileSync("index.html", "utf8");
+    response.end(page);
   } else if (request.method === "GET" && request.url === "/styles.css") {
-    let styling = fs.readFileSync("style.css", "utf-8");
+    let styling = fs.readFileSync("style.css", "utf8");
     response.end(styling);
   } else if (request.method === "POST" && request.url === "/sayHi") {
     // code here...
@@ -20,9 +20,26 @@ function doOnRequest(request, response) {
   } else if (request.method === "POST" && request.url === "/greeting") {
     // accumulate the request body in a series of chunks
     // code here...
+    let body = [];
+    request
+      .on("data", (chunk) => {
+        body.push(chunk);
+      })
+      .on("end", () => {
+        body = Buffer.concat(body).toString() + "\n";
+        fs.appendFileSync("hi_log.txt", body);
+        response.end(body);
+      });
+    response.end("updated greeting");
+  } else if (request.method == "DELETE" && request.url == "/delete-greeting") {
+    fs.unlinkSync("hi_log.txt");
+    response.end("deleted greeting");
   } else {
     // Handle 404 error: page not found
     // code here...
+    response.statusCode = 404;
+    response.statusMessage = "Error: Not Found";
+    response.end();
   }
 }
 

@@ -29,3 +29,26 @@ Node Streams:
     - When the whole file has been processed, node will emit a 'close' event signaling that file processing is completed
     - 
 
+Asynchronicity in Node:
+    - there are no timers in Javascript
+    - setTimeout is not a Javascript function, it is part of the browser API - there are no timers in Javascript
+    - One of the queues in node is the timer queue
+    - setTimeout will only ever tell you how long it will take before the callback function you pass as an argument to setTimeout will take before that callback is placed in the timer queue - it will not tell you how long it will take before the function will run
+    - Another queue is the I/O callback queue - 95% of the functions that auto-run in node go into this queue
+    -when javascript is running code in the thread of execution, it will always run all global code first before it allows any of the functions in any of the callback queues to run
+    - The third prioritized queue is the check queue - in order to place a function in the check queue, you use setImmediate and pass it the function you want to be added to the check queue
+    -the check queue is always checked last so that node can insure that all I/O related tasks have been completed before anything in the check queue is run - this is by design - there are times that we want to ensure that certain functions are run only after all I/O tasks are complete 
+    - once the callstack has been cleared of all globally invoked functions and the remaining global code has been executed, the event loop will then go back and start checking the callback queues in order of priority
+    -the timer queue will be the queue that is checked first and therefor has the highest priority - this is not really a queue per se, but timers are stored in a minHeap - for the sake of this demonstration we will think of it as a queue
+    - the next queue in priority is the I/O callback queue
+    -the final queue to be checked by the node event loop is the check queue and will add callback functions in this queue to the call stack last
+    -
+    -there is another queue in the node event loop called the microtask queue which will take priority over all other queues in the event loop
+    - the event loop will go back and check the microtask queue in between checking each of the other queues
+    - there are 2 microtask queues
+        - A) the first queue is for any functions that are process.nextTick() functions, or functions that will only be run once and then we are done with them
+        - B) the second queue is for any functions that will run after a promise has been resolved
+    - there is one final queue in the node event loop - this is the close handle queue and will hold any functions that are set to be run once a 'close' event has been emitted - an example of this is when a file has been completely read in, then node will emit a 'close' event
+    - Hold each of the deferred autorun functions in one of the task queues when the node background API "completes"
+    - add the function to the call stack (i.e. execute the function) ONLY when the call stack is totally empty (Have the Event Loop check this condition)
+    - Prioritize function in the timer queue over the I/O queue over the setImmediate(check) queue
