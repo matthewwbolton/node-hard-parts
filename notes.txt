@@ -43,3 +43,12 @@ Asynchronicity in Node:
     - the next queue in priority is the I/O callback queue
     -the final queue to be checked by the node event loop is the check queue and will add callback functions in this queue to the call stack last
     -
+    -there is another queue in the node event loop called the microtask queue which will take priority over all other queues in the event loop
+    - the event loop will go back and check the microtask queue in between checking each of the other queues
+    - there are 2 microtask queues
+        - A) the first queue is for any functions that are process.nextTick() functions, or functions that will only be run once and then we are done with them
+        - B) the second queue is for any functions that will run after a promise has been resolved
+    - there is one final queue in the node event loop - this is the close handle queue and will hold any functions that are set to be run once a 'close' event has been emitted - an example of this is when a file has been completely read in, then node will emit a 'close' event
+    - Hold each of the deferred autorun functions in one of the task queues when the node background API "completes"
+    - add the function to the call stack (i.e. execute the function) ONLY when the call stack is totally empty (Have the Event Loop check this condition)
+    - Prioritize function in the timer queue over the I/O queue over the setImmediate(check) queue
